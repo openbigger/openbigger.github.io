@@ -1,6 +1,6 @@
 videos/*.mp4
 node_modules/
-dist/
 tailwindcss
 .DS_Store
+dist/
 output.css

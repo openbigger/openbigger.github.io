@@ -1,34 +1,96 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的视频展示站</title>
-    <link href="./output.css" rel="stylesheet">
+    <title>ExaSynth | AI Robotics Lab</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 针对视频背景的微调 */
+        .video-docker video {
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+        }
+    </style>
 </head>
 <body class="bg-black text-white font-sans">
-    <div class="container mx-auto px-4 py-12">
-        <header class="mb-12">
-            <h1 class="text-4xl font-bold border-l-4 border-blue-500 pl-4">我的视频作品</h1>
-        </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="bg-gray-900 rounded-lg overflow-hidden border border-gray-800 transition hover:border-blue-500">
-                <video controls class="w-full aspect-video">
-                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-                    您的浏览器不支持 HTML5 视频。
-                </video>
-                <div class="p-4">
-                    <h3 class="text-lg font-medium">演示视频 01</h3>
-                </div>
+    <nav class="fixed w-full z-50 bg-black/50 backdrop-blur-md border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold tracking-tighter italic">EXA<span class="text-emerald-500">SYNTH</span></div>
+            <div class="hidden md:flex space-x-8 text-sm font-medium uppercase tracking-widest">
+                <a href="#home" class="hover:text-emerald-400 transition">Home</a>
+                <a href="#lab" class="hover:text-emerald-400 transition">Laboratory</a>
+                <a href="#projects" class="hover:text-emerald-400 transition">Projects</a>
+                <a href="#partner" class="hover:text-emerald-400 transition">Partners</a>
+                <a href="#contact" class="hover:text-emerald-400 transition">Contact</a>
             </div>
         </div>
+    </nav>
 
-        <img src="images/meat-bun.jpeg" alt="Meat Bun" class="mx-auto my-8 max-w-xs">
+    <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden">
+        <div class="video-docker absolute inset-0 z-0">
+            <video class="absolute object-cover w-full h-full opacity-40" 
+                   src="https://assets.mixkit.co/videos/preview/mixkit-circuit-board-animation-1140-large.mp4" 
+                   autoplay muted loop></video>
+        </div>
+        <div class="relative z-10 text-center px-4">
+            <h1 class="text-6xl md:text-8xl font-black mb-4 tracking-tighter">EXASYNTH</h1>
+            <p class="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto font-light">
+                Next-Generation AI Robotics Laboratory. <br>
+                <span class="text-emerald-500 font-normal italic">In Collaboration with QuikTech.</span>
+            </p>
+            <div class="mt-10">
+                <a href="#lab" class="px-8 py-3 border border-emerald-500 text-emerald-500 hover:bg-emerald-500 hover:text-black transition duration-300 rounded-full uppercase text-sm tracking-widest">Explore Lab</a>
+            </div>
+        </div>
+    </section>
 
-        <footer class="text-center text-gray-400 mt-8">
-            <p>&copy; 2026 My Website. All rights reserved.</p>
-        </footer>
-    </div>
+    <section id="lab" class="py-24 bg-zinc-950 px-6">
+        <div class="max-w-7xl mx-auto text-center mb-16">
+            <h2 class="text-4xl font-bold mb-4">Laboratory Services</h2>
+            <div class="w-20 h-1 bg-emerald-500 mx-auto"></div>
+        </div>
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="p-8 border border-white/5 bg-white/5 hover:border-emerald-500/50 transition group">
+                <div class="text-emerald-500 mb-4">⚡</div>
+                <h3 class="text-xl font-bold mb-2">Neural Control</h3>
+                <p class="text-gray-400 text-sm">Advanced neural networks for real-time robotic limb synchronization.</p>
+            </div>
+            <div class="p-8 border border-white/5 bg-white/5 hover:border-emerald-500/50 transition">
+                <div class="text-emerald-500 mb-4">🤖</div>
+                <h3 class="text-xl font-bold mb-2">Autonomous Navigation</h3>
+                <p class="text-gray-400 text-sm">LiDAR and computer vision integration for complex environments.</p>
+            </div>
+            <div class="p-8 border border-white/5 bg-white/5 hover:border-emerald-500/50 transition">
+                <div class="text-emerald-500 mb-4">🧬</div>
+                <h3 class="text-xl font-bold mb-2">Bionic Design</h3>
+                <p class="text-gray-400 text-sm">Merging organic movements with industrial-grade durability.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="py-24 px-6 bg-black">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="h-80 bg-zinc-800 flex items-center justify-center overflow-hidden relative group">
+                <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=800&q=80" class="object-cover w-full h-full opacity-60 group-hover:scale-110 transition duration-500">
+                <span class="absolute bottom-4 left-4 font-bold tracking-widest uppercase">Project: Alpha-1</span>
+            </div>
+            <div class="h-80 bg-zinc-800 flex items-center justify-center overflow-hidden relative group">
+                <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80" class="object-cover w-full h-full opacity-60 group-hover:scale-110 transition duration-500">
+                <span class="absolute bottom-4 left-4 font-bold tracking-widest uppercase">Project: Neural-Link</span>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="py-12 border-t border-white/10 text-center text-gray-500 text-xs tracking-widest uppercase">
+        <p>© 2026 EXASYNTH LABS x QUIKTECH. ALL RIGHTS RESERVED.</p>
+    </footer>
+
 </body>
 </html>
