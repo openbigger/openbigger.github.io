@@ -18,6 +18,42 @@
         }
         /* 隐藏未激活语言的平滑效果 */
         [data-i18n] { transition: opacity 0.3s ease; }
+        /* Gallery 滚动样式 */
+        .gallery {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+            margin-top: 10px;
+        }
+        .gallery .scroll {
+            display: flex;
+            flex-direction: column;
+        }
+        .gallery:hover .scroll {
+            animation: scrollUp 10s linear infinite;
+        }
+        .gallery img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            margin-bottom: 10px;
+            border-radius: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.6;
+            transition: all 0.7s;
+        }
+        .gallery img:hover {
+            opacity: 1;
+            transform: scale(1.05);
+            filter: grayscale(0);
+        }
+        .gallery img {
+            filter: grayscale(1);
+        }
+        @keyframes scrollUp {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-66.666%); }
+        }
     </style>
 </head>
 <body class="bg-black text-white font-sans">
@@ -29,13 +65,24 @@
             <div class="flex items-center space-x-6">
                 <div class="hidden md:flex space-x-8 text-sm font-medium uppercase tracking-widest">
                     <a href="#home" class="hover:text-emerald-400 transition" data-i18n="nav-home">Home</a>
-                    <a href="#about" class="hover:text-emerald-400 transition" data-i18n="nav-about">About</a>
+                    <a href="#about" onclick="animateNumbers()" class="hover:text-emerald-400 transition" data-i18n="nav-about">About</a>
+                    <a href="#products" class="hover:text-emerald-400 transition" data-i18n="nav-products">Products</a>
                     <a href="#services" class="hover:text-emerald-400 transition" data-i18n="nav-services">Services</a>
                     <a href="#partners" class="hover:text-emerald-400 transition" data-i18n="nav-partners">Partners</a>
                 </div>
+                <button onclick="toggleMenu()" class="md:hidden text-white text-2xl">☰</button>
                 <button onclick="toggleLanguage()" id="langBtn" class="px-3 py-1 border border-emerald-500/50 text-emerald-500 text-xs rounded hover:bg-emerald-500 hover:text-black transition duration-300 font-bold">
                     中文
                 </button>
+            </div>
+            <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-black/90 backdrop-blur-md border-b border-white/10">
+                <div class="flex flex-col space-y-4 p-6">
+                    <a href="#home" onclick="toggleMenu()" class="hover:text-emerald-400 transition" data-i18n="nav-home">Home</a>
+                    <a href="#about" onclick="animateNumbers(); toggleMenu()" class="hover:text-emerald-400 transition" data-i18n="nav-about">About</a>
+                    <a href="#products" onclick="toggleMenu()" class="hover:text-emerald-400 transition" data-i18n="nav-products">Products</a>
+                    <a href="#services" onclick="toggleMenu()" class="hover:text-emerald-400 transition" data-i18n="nav-services">Services</a>
+                    <a href="#partners" onclick="toggleMenu()" class="hover:text-emerald-400 transition" data-i18n="nav-partners">Partners</a>
+                </div>
             </div>
         </div>
     </nav>
@@ -69,16 +116,16 @@
                     ExaSynth is at the forefront of robotic evolution. We specialize in creating high-fidelity simulation environments and physical robotic systems that redefine how machines interact with the world.
                 </p>
                 <div class="grid grid-cols-2 gap-6 pt-6 border-t border-white/10 text-center">
-                    <div><div class="text-3xl font-bold text-white">10+</div><div class="text-xs text-gray-500 uppercase tracking-widest mt-2" data-i18n="stat-1">AI Models</div></div>
-                    <div><div class="text-3xl font-bold text-white">24/7</div><div class="text-xs text-gray-500 uppercase tracking-widest mt-2" data-i18n="stat-2">Automation</div></div>
+                    <div><div id="num1" class="text-3xl font-bold text-white">10+</div><div class="text-xs text-gray-500 uppercase tracking-widest mt-2" data-i18n="stat-1">AI Models</div></div>
+                    <div><div id="num2" class="text-3xl font-bold text-white">24/7</div><div class="text-xs text-gray-500 uppercase tracking-widest mt-2" data-i18n="stat-2">Automation</div></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="services" class="py-32 bg-black px-6">
+    <section id="products" class="py-32 bg-black px-6">
         <div class="max-w-7xl mx-auto text-center mb-20">
-            <h2 class="text-4xl font-bold mb-4 uppercase tracking-widest" data-i18n="services-title">Products & Services</h2>
+            <h2 class="text-4xl font-bold mb-4 uppercase tracking-widest" data-i18n="services-title">Products</h2>
             <div class="w-24 h-1 bg-emerald-500 mx-auto"></div>
         </div>
         <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -86,16 +133,82 @@
                 <div class="text-emerald-500 text-4xl mb-6">⚡</div>
                 <h3 class="text-xl font-bold mb-4" data-i18n="s1-t">Neural Control</h3>
                 <p class="text-gray-500 leading-relaxed" data-i18n="s1-d">Real-time synaptic mapping for complex motor control in humanoid systems.</p>
+                <div class="gallery group">
+                    <div class="scroll">
+                        <img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?auto=format&fit=crop&w=400&q=80" alt="Neural Network">
+                        <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=400&q=80" alt="Circuit Board">
+                        <img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?auto=format&fit=crop&w=400&q=80" alt="Neural Network">
+                    </div>
+                </div>
             </div>
             <div class="p-10 border border-white/5 bg-zinc-900/50 rounded-2xl hover:bg-emerald-500/5 transition duration-500">
                 <div class="text-emerald-500 text-4xl mb-6">🤖</div>
                 <h3 class="text-xl font-bold mb-4" data-i18n="s2-t">Lab OS</h3>
                 <p class="text-gray-500 leading-relaxed" data-i18n="s2-d">Our proprietary operating system built specifically for AI-driven research labs.</p>
+                <div class="gallery group">
+                    <div class="scroll">
+                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=400&q=80" alt="Code">
+                        <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=400&q=80" alt="Server">
+                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=400&q=80" alt="Code">
+                    </div>
+                </div>
             </div>
             <div class="p-10 border border-white/5 bg-zinc-900/50 rounded-2xl hover:bg-emerald-500/5 transition duration-500 text-white">
                 <div class="text-emerald-500 text-4xl mb-6">⚙️</div>
                 <h3 class="text-xl font-bold mb-4" data-i18n="s3-t">Hardware Design</h3>
                 <p class="text-gray-500 leading-relaxed" data-i18n="s3-d">Custom end-effector and exoskeleton design for industrial-scale deployment.</p>
+                <div class="gallery group">
+                    <div class="scroll">
+                        <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80" alt="Robot Arm">
+                        <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=400&q=80" alt="Mechanical">
+                        <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80" alt="Robot Arm">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="py-32 bg-black px-6">
+        <div class="max-w-7xl mx-auto text-center mb-20">
+            <h2 class="text-4xl font-bold mb-4 uppercase tracking-widest" data-i18n="services-title">Services</h2>
+            <div class="w-24 h-1 bg-emerald-500 mx-auto"></div>
+        </div>
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div class="p-10 border border-white/5 bg-zinc-900/50 rounded-2xl hover:bg-emerald-500/5 transition duration-500 group">
+                <div class="text-emerald-500 text-4xl mb-6">⚡</div>
+                <h3 class="text-xl font-bold mb-4" data-i18n="s1-t">Neural Control</h3>
+                <p class="text-gray-500 leading-relaxed" data-i18n="s1-d">Real-time synaptic mapping for complex motor control in humanoid systems.</p>
+                <div class="gallery group">
+                    <div class="scroll">
+                        <img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?auto=format&fit=crop&w=400&q=80" alt="Neural Network">
+                        <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=400&q=80" alt="Circuit Board">
+                        <img src="https://images.unsplash.com/photo-1555255707-c07966088b7b?auto=format&fit=crop&w=400&q=80" alt="Neural Network">
+                    </div>
+                </div>
+            </div>
+            <div class="p-10 border border-white/5 bg-zinc-900/50 rounded-2xl hover:bg-emerald-500/5 transition duration-500">
+                <div class="text-emerald-500 text-4xl mb-6">🤖</div>
+                <h3 class="text-xl font-bold mb-4" data-i18n="s2-t">Lab OS</h3>
+                <p class="text-gray-500 leading-relaxed" data-i18n="s2-d">Our proprietary operating system built specifically for AI-driven research labs.</p>
+                <div class="gallery">
+                    <div class="scroll">
+                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=400&q=80" alt="Code">
+                        <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?auto=format&fit=crop&w=400&q=80" alt="Server">
+                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=400&q=80" alt="Code">
+                    </div>
+                </div>
+            </div>
+            <div class="p-10 border border-white/5 bg-zinc-900/50 rounded-2xl hover:bg-emerald-500/5 transition duration-500 text-white">
+                <div class="text-emerald-500 text-4xl mb-6">⚙️</div>
+                <h3 class="text-xl font-bold mb-4" data-i18n="s3-t">Hardware Design</h3>
+                <p class="text-gray-500 leading-relaxed" data-i18n="s3-d">Custom end-effector and exoskeleton design for industrial-scale deployment.</p>
+                <div class="gallery">
+                    <div class="scroll">
+                        <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80" alt="Robot Arm">
+                        <img src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=400&q=80" alt="Mechanical">
+                        <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=400&q=80" alt="Robot Arm">
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -121,7 +234,7 @@
     <script>
         const translations = {
             en: {
-                "nav-home": "Home", "nav-about": "About", "nav-services": "Services", "nav-partners": "Partners",
+                "nav-home": "Home", "nav-about": "About", "nav-products": "Products", "nav-services": "Services", "nav-partners": "Partners",
                 "hero-title": "ExaSynth", "hero-subtitle": "Next-Generation AI Robotics Laboratory. In Collaboration with QuikTech.", "hero-btn": "Explore Lab",
                 "about-title": "About Us", "about-content": "ExaSynth is at the forefront of robotic evolution. We specialize in creating high-fidelity simulation environments and physical robotic systems that redefine how machines interact with the world.",
                 "stat-1": "AI Models", "stat-2": "Automation",
@@ -132,7 +245,7 @@
                 "partners-label": "Strategic Partnership"
             },
             zh: {
-                "nav-home": "首页", "nav-about": "关于我们", "nav-services": "产品服务", "nav-partners": "合作伙伴",
+                "nav-home": "首页", "nav-about": "关于我们", "nav-products": "产品", "nav-services": "服务", "nav-partners": "合作伙伴",
                 "hero-title": "ExaSynth 实验室", "hero-subtitle": "次世代 AI 机器人实验室。与 QuikTech 深度合作。", "hero-btn": "探索实验室",
                 "about-title": "关于我们", "about-content": "ExaSynth 走在机器人进化的前沿。我们专注于创建高保真仿真环境和物理机器人系统，重新定义机器与世界的交互方式。",
                 "stat-1": "AI 模型", "stat-2": "全自动化",
@@ -160,6 +273,37 @@
                     el.style.opacity = 1;
                 }, 200);
             });
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        // 数字滚动特效 - 点击about导航时触发
+        function animateNumbers() {
+            animateNumber('num1', '10+');
+            animateNumber('num2', '24/7');
+        }
+
+        function animateNumber(id, target) {
+            const element = document.getElementById(id);
+            let count = 0;
+            const maxRolls = 20; // 滚动次数
+            const interval = setInterval(() => {
+                if (id === 'num1') {
+                    element.textContent = Math.floor(Math.random() * 9) + 1 + '+';
+                } else {
+                    const num = Math.floor(Math.random() * 100);
+                    const suffix = Math.floor(Math.random() * 10);
+                    element.textContent = num.toString().padStart(2, '0') + '/' + suffix;
+                }
+                count++;
+                if (count >= maxRolls) {
+                    clearInterval(interval);
+                    element.textContent = target;
+                }
+            }, 50); // 每50ms改变一次
         }
     </script>
 </body>
