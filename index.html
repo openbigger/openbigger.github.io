@@ -16,6 +16,8 @@
             width: auto;
             height: auto;
         }
+        /* 隐藏未激活语言的平滑效果 */
+        [data-i18n] { transition: opacity 0.3s ease; }
     </style>
 </head>
 <body class="bg-black text-white font-sans">
@@ -23,12 +25,17 @@
     <nav class="fixed w-full z-50 bg-black/50 backdrop-blur-md border-b border-white/10">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <div class="text-2xl font-bold tracking-tighter italic">EXA<span class="text-emerald-500">SYNTH</span></div>
-            <div class="hidden md:flex space-x-8 text-sm font-medium uppercase tracking-widest">
-                <a href="#home" class="hover:text-emerald-400 transition">Home</a>
-                <a href="#lab" class="hover:text-emerald-400 transition">Laboratory</a>
-                <a href="#projects" class="hover:text-emerald-400 transition">Projects</a>
-                <a href="#partner" class="hover:text-emerald-400 transition">Partners</a>
-                <a href="#contact" class="hover:text-emerald-400 transition">Contact</a>
+            
+            <div class="flex items-center space-x-6">
+                <div class="hidden md:flex space-x-8 text-sm font-medium uppercase tracking-widest">
+                    <a href="#home" class="hover:text-emerald-400 transition" data-i18n="nav-home">Home</a>
+                    <a href="#about" class="hover:text-emerald-400 transition" data-i18n="nav-about">About</a>
+                    <a href="#services" class="hover:text-emerald-400 transition" data-i18n="nav-services">Services</a>
+                    <a href="#partners" class="hover:text-emerald-400 transition" data-i18n="nav-partners">Partners</a>
+                </div>
+                <button onclick="toggleLanguage()" id="langBtn" class="px-3 py-1 border border-emerald-500/50 text-emerald-500 text-xs rounded hover:bg-emerald-500 hover:text-black transition duration-300 font-bold">
+                    中文
+                </button>
             </div>
         </div>
     </nav>
@@ -40,57 +47,120 @@
                    autoplay muted loop></video>
         </div>
         <div class="relative z-10 text-center px-4">
-            <h1 class="text-6xl md:text-8xl font-black mb-4 tracking-tighter">EXASYNTH</h1>
-            <p class="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto font-light">
+            <h1 class="text-6xl md:text-8xl font-black mb-4 tracking-tighter uppercase" data-i18n="hero-title">ExaSynth</h1>
+            <p class="text-xl md:text-2xl text-gray-300 max-w-2xl mx-auto font-light" data-i18n="hero-subtitle">
                 Next-Generation AI Robotics Laboratory. <br>
                 <span class="text-emerald-500 font-normal italic">In Collaboration with QuikTech.</span>
             </p>
             <div class="mt-10">
-                <a href="#lab" class="px-8 py-3 border border-emerald-500 text-emerald-500 hover:bg-emerald-500 hover:text-black transition duration-300 rounded-full uppercase text-sm tracking-widest">Explore Lab</a>
+                <a href="#about" class="px-8 py-3 border border-emerald-500 text-emerald-500 hover:bg-emerald-500 hover:text-black transition duration-300 rounded-full uppercase text-sm tracking-widest" data-i18n="hero-btn">Explore Lab</a>
             </div>
         </div>
     </section>
 
-    <section id="lab" class="py-24 bg-zinc-950 px-6">
-        <div class="max-w-7xl mx-auto text-center mb-16">
-            <h2 class="text-4xl font-bold mb-4">Laboratory Services</h2>
-            <div class="w-20 h-1 bg-emerald-500 mx-auto"></div>
-        </div>
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="p-8 border border-white/5 bg-white/5 hover:border-emerald-500/50 transition group">
-                <div class="text-emerald-500 mb-4">⚡</div>
-                <h3 class="text-xl font-bold mb-2">Neural Control</h3>
-                <p class="text-gray-400 text-sm">Advanced neural networks for real-time robotic limb synchronization.</p>
+    <section id="about" class="py-32 bg-zinc-950 px-6">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-16 items-center">
+            <div class="relative group overflow-hidden rounded-xl border border-white/10">
+                <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=800&q=80" class="object-cover w-full h-full opacity-60 group-hover:scale-105 transition duration-700 grayscale hover:grayscale-0">
             </div>
-            <div class="p-8 border border-white/5 bg-white/5 hover:border-emerald-500/50 transition">
-                <div class="text-emerald-500 mb-4">🤖</div>
-                <h3 class="text-xl font-bold mb-2">Autonomous Navigation</h3>
-                <p class="text-gray-400 text-sm">LiDAR and computer vision integration for complex environments.</p>
-            </div>
-            <div class="p-8 border border-white/5 bg-white/5 hover:border-emerald-500/50 transition">
-                <div class="text-emerald-500 mb-4">🧬</div>
-                <h3 class="text-xl font-bold mb-2">Bionic Design</h3>
-                <p class="text-gray-400 text-sm">Merging organic movements with industrial-grade durability.</p>
+            <div>
+                <h2 class="text-4xl font-bold mb-6 tracking-tight text-emerald-500" data-i18n="about-title">About Us</h2>
+                <p class="text-gray-400 text-lg leading-relaxed mb-6" data-i18n="about-content">
+                    ExaSynth is at the forefront of robotic evolution. We specialize in creating high-fidelity simulation environments and physical robotic systems that redefine how machines interact with the world.
+                </p>
+                <div class="grid grid-cols-2 gap-6 pt-6 border-t border-white/10 text-center">
+                    <div><div class="text-3xl font-bold text-white">10+</div><div class="text-xs text-gray-500 uppercase tracking-widest mt-2" data-i18n="stat-1">AI Models</div></div>
+                    <div><div class="text-3xl font-bold text-white">24/7</div><div class="text-xs text-gray-500 uppercase tracking-widest mt-2" data-i18n="stat-2">Automation</div></div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section id="projects" class="py-24 px-6 bg-black">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="h-80 bg-zinc-800 flex items-center justify-center overflow-hidden relative group">
-                <img src="https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=800&q=80" class="object-cover w-full h-full opacity-60 group-hover:scale-110 transition duration-500">
-                <span class="absolute bottom-4 left-4 font-bold tracking-widest uppercase">Project: Alpha-1</span>
+    <section id="services" class="py-32 bg-black px-6">
+        <div class="max-w-7xl mx-auto text-center mb-20">
+            <h2 class="text-4xl font-bold mb-4 uppercase tracking-widest" data-i18n="services-title">Products & Services</h2>
+            <div class="w-24 h-1 bg-emerald-500 mx-auto"></div>
+        </div>
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div class="p-10 border border-white/5 bg-zinc-900/50 rounded-2xl hover:bg-emerald-500/5 transition duration-500 group">
+                <div class="text-emerald-500 text-4xl mb-6">⚡</div>
+                <h3 class="text-xl font-bold mb-4" data-i18n="s1-t">Neural Control</h3>
+                <p class="text-gray-500 leading-relaxed" data-i18n="s1-d">Real-time synaptic mapping for complex motor control in humanoid systems.</p>
             </div>
-            <div class="h-80 bg-zinc-800 flex items-center justify-center overflow-hidden relative group">
-                <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=80" class="object-cover w-full h-full opacity-60 group-hover:scale-110 transition duration-500">
-                <span class="absolute bottom-4 left-4 font-bold tracking-widest uppercase">Project: Neural-Link</span>
+            <div class="p-10 border border-white/5 bg-zinc-900/50 rounded-2xl hover:bg-emerald-500/5 transition duration-500">
+                <div class="text-emerald-500 text-4xl mb-6">🤖</div>
+                <h3 class="text-xl font-bold mb-4" data-i18n="s2-t">Lab OS</h3>
+                <p class="text-gray-500 leading-relaxed" data-i18n="s2-d">Our proprietary operating system built specifically for AI-driven research labs.</p>
+            </div>
+            <div class="p-10 border border-white/5 bg-zinc-900/50 rounded-2xl hover:bg-emerald-500/5 transition duration-500 text-white">
+                <div class="text-emerald-500 text-4xl mb-6">⚙️</div>
+                <h3 class="text-xl font-bold mb-4" data-i18n="s3-t">Hardware Design</h3>
+                <p class="text-gray-500 leading-relaxed" data-i18n="s3-d">Custom end-effector and exoskeleton design for industrial-scale deployment.</p>
             </div>
         </div>
     </section>
 
-    <footer id="contact" class="py-12 border-t border-white/10 text-center text-gray-500 text-xs tracking-widest uppercase">
+    <section id="partners" class="py-32 bg-zinc-950 border-t border-white/5 px-6">
+        <div class="max-w-7xl mx-auto text-center">
+            <h2 class="text-sm font-bold text-gray-500 uppercase tracking-[0.4em] mb-12" data-i18n="partners-label">Strategic Partnership</h2>
+            <div class="flex flex-wrap justify-center items-center gap-16 md:gap-32">
+                <div class="group flex flex-col items-center">
+                    <span class="text-3xl md:text-5xl font-black text-white/20 group-hover:text-white transition duration-500 tracking-tighter cursor-pointer">QUIKTECH</span>
+                    <span class="text-[10px] text-emerald-500 mt-2 opacity-0 group-hover:opacity-100 transition tracking-[0.2em]">CORE PARTNER</span>
+                </div>
+                <div class="text-2xl md:text-4xl font-mono text-white/10 tracking-tighter">AI_RESEARCH_ORG</div>
+                <div class="text-2xl md:text-4xl font-serif text-white/10 italic">Nexus Dynamics</div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact" class="py-12 border-t border-white/10 text-center text-gray-600 text-[10px] tracking-widest uppercase bg-black">
         <p>© 2026 EXASYNTH LABS x QUIKTECH. ALL RIGHTS RESERVED.</p>
     </footer>
 
+    <script>
+        const translations = {
+            en: {
+                "nav-home": "Home", "nav-about": "About", "nav-services": "Services", "nav-partners": "Partners",
+                "hero-title": "ExaSynth", "hero-subtitle": "Next-Generation AI Robotics Laboratory. In Collaboration with QuikTech.", "hero-btn": "Explore Lab",
+                "about-title": "About Us", "about-content": "ExaSynth is at the forefront of robotic evolution. We specialize in creating high-fidelity simulation environments and physical robotic systems that redefine how machines interact with the world.",
+                "stat-1": "AI Models", "stat-2": "Automation",
+                "services-title": "Products & Services", 
+                "s1-t": "Neural Control", "s1-d": "Real-time synaptic mapping for complex motor control.",
+                "s2-t": "Lab OS", "s2-d": "Proprietary OS built specifically for AI research labs.",
+                "s3-t": "Hardware Design", "s3-d": "Custom end-effector and exoskeleton design.",
+                "partners-label": "Strategic Partnership"
+            },
+            zh: {
+                "nav-home": "首页", "nav-about": "关于我们", "nav-services": "产品服务", "nav-partners": "合作伙伴",
+                "hero-title": "ExaSynth 实验室", "hero-subtitle": "次世代 AI 机器人实验室。与 QuikTech 深度合作。", "hero-btn": "探索实验室",
+                "about-title": "关于我们", "about-content": "ExaSynth 走在机器人进化的前沿。我们专注于创建高保真仿真环境和物理机器人系统，重新定义机器与世界的交互方式。",
+                "stat-1": "AI 模型", "stat-2": "全自动化",
+                "services-title": "产品与服务", 
+                "s1-t": "神经控制", "s1-d": "用于人形系统复杂运动控制的实时突触映射技术。",
+                "s2-t": "实验室 OS", "s2-d": "专为 AI 驱动的研究实验室构建的专利操作系统。",
+                "s3-t": "硬件设计", "s3-d": "面向工业级规模部署的定制化末端执行器和外骨骼设计。",
+                "partners-label": "战略合作伙伴"
+            }
+        };
+
+        let currentLang = 'en';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'zh' : 'en';
+            const btn = document.getElementById('langBtn');
+            btn.innerText = currentLang === 'en' ? '中文' : 'EN';
+            
+            // 触发平滑切换效果
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                el.style.opacity = 0;
+                setTimeout(() => {
+                    const key = el.getAttribute('data-i18n');
+                    el.innerText = translations[currentLang][key];
+                    el.style.opacity = 1;
+                }, 200);
+            });
+        }
+    </script>
 </body>
 </html>
