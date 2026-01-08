@@ -227,6 +227,59 @@
         </div>
     </section>
 
+<section id="videos" class="py-16 bg-black">
+    <div class="max-w-7xl mx-auto px-6">
+        <h2 class="text-4xl font-bold text-center mb-12 text-white" data-i18n="videos-title">Videos</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            
+            <div class="video-card group relative aspect-video bg-gray-900 rounded-xl overflow-hidden cursor-pointer border border-white/10" 
+                 onclick="playVideo(this, 'bmNaLtC6vkU')">
+                <img src="https://i.ytimg.com/vi/bmNaLtC6vkU/hqdefault.jpg" class="w-full h-full object-cover group-hover:opacity-50 transition-opacity">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl">
+                        <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="video-card group relative aspect-video bg-gray-900 rounded-xl overflow-hidden cursor-pointer border border-white/10" 
+                 onclick="playVideo(this, 'cpraXaw7dyc')">
+                <img src="https://i.ytimg.com/vi/cpraXaw7dyc/hqdefault.jpg" class="w-full h-full object-cover group-hover:opacity-50 transition-opacity">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl">
+                        <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="video-card group relative aspect-video bg-gray-900 rounded-xl overflow-hidden cursor-pointer border border-white/10" 
+                 onclick="playVideo(this, 'UMrE2T_L0yo')">
+                <img src="https://i.ytimg.com/vi/UMrE2T_L0yo/hqdefault.jpg" class="w-full h-full object-cover group-hover:opacity-50 transition-opacity">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform shadow-xl">
+                        <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<script>
+function playVideo(container, videoId) {
+    // 确保 iframe 带有必要的参数
+    container.innerHTML = `
+        <iframe 
+            class="w-full h-full rounded-xl" 
+            src="https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+        </iframe>`;
+}
+</script>
+
     <footer id="contact" class="py-12 border-t border-white/10 text-center text-gray-600 text-[10px] tracking-widest uppercase bg-black">
         <p>© 2026 EXASYNTH LABS x QUIKTECH. ALL RIGHTS RESERVED.</p>
     </footer>
@@ -243,7 +296,8 @@
                 "s1-t": "Neural Control", "s1-d": "Real-time synaptic mapping for complex motor control.",
                 "s2-t": "Lab OS", "s2-d": "Proprietary OS built specifically for AI research labs.",
                 "s3-t": "Hardware Design", "s3-d": "Custom end-effector and exoskeleton design.",
-                "partners-label": "Partnership & Success Stories"
+                "partners-label": "Partnership & Success Stories",
+                "videos-title": "Videos"
             },
             zh: {
                 "nav-home": "首页", "nav-about": "关于我们", "nav-products": "产品", "nav-services": "服务", "nav-partners": "合作伙伴",
@@ -255,7 +309,9 @@
                 "s1-t": "神经控制", "s1-d": "用于人形系统复杂运动控制的实时突触映射技术。",
                 "s2-t": "实验室 OS", "s2-d": "专为 AI 驱动的研究实验室构建的专利操作系统。",
                 "s3-t": "硬件设计", "s3-d": "面向工业级规模部署的定制化末端执行器和外骨骼设计。",
-                "partners-label": "合作伙伴与成功案例"
+                "partners-label": "合作伙伴与成功案例",
+                "videos-title": "视频",
+                "videos-title": "视频"
             }
         };
 
