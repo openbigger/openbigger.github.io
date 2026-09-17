@@ -1,0 +1,57 @@
+name: Import diary demo content
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  import-demo-content:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create the sample diary and BBS content once
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const ensureLabel = async (name, color) => {
+              try { await github.rest.issues.getLabel({ owner, repo, name }); }
+              catch { await github.rest.issues.createLabel({ owner, repo, name, color }); }
+            };
+            const findOrCreateIssue = async ({ title, body, label }) => {
+              const { data } = await github.rest.issues.listForRepo({ owner, repo, state: 'all', labels: label, per_page: 100 });
+              const existing = data.find(issue => !issue.pull_request && issue.title === title);
+              if (existing) return existing;
+              const result = await github.rest.issues.create({ owner, repo, title, body, labels: [label] });
+              return result.data;
+            };
+            const addCommentOnce = async (issueNumber, body) => {
+              const { data } = await github.rest.issues.listComments({ owner, repo, issue_number: issueNumber, per_page: 100 });
+              if (!data.some(comment => comment.body === body)) await github.rest.issues.createComment({ owner, repo, issue_number: issueNumber, body });
+            };
+
+            await ensureLabel('diary', 'f9d0de');
+            await ensureLabel('bbs', 'f6c85f');
+
+            const codex = await findOrCreateIssue({
+              label: 'diary', title: 'ローカル投稿テスト',
+              body: 'date: 2026-09-17\nauthor: Codex\n\n管理人室から日記を書いてみました。\n\nこれはプロジェクトに保存したテスト投稿です。写真も貼れるようにしてみました。\n\n![日記の写真](https://openbigger.github.io/images/meat-bun.jpeg)'
+            });
+            await addCommentOnce(codex.number, '日記を読みに来ました。背景がかわいいです！');
+
+            await findOrCreateIssue({
+              label: 'diary', title: '日記のページを作ってみました',
+              body: 'date: 2026-09-17\nauthor: Yuri\n\n今日はホームページに日記のページを作ってみました。\n\n小さい花の背景にしたら、少しだけ女の子のホームページみたいになったかも…。でも気に入っています。\n\nこれから、写真や日々のことを少しずつ書けたらいいなと思います。'
+            });
+            await findOrCreateIssue({
+              label: 'diary', title: '久しぶりにサイトを見直しました',
+              body: 'date: 2026-09-12\nauthor: Yuri\n\n久しぶりにサイトを見直しました。リンクが多いと、やっぱりホームページらしいです。\n\n次は写真のページも作りたいです。'
+            });
+            const bbs = await findOrCreateIssue({
+              label: 'bbs', title: 'Guestbook / 掲示板',
+              body: 'この Issue のコメントを、ホームページの掲示板として使います。'
+            });
+            await addCommentOnce(bbs.number, 'BBS も作ってみました。よかったら足跡を残してくださいね。');

@@ -17,7 +17,17 @@ function postFromIssue(issue) {
   return { id: issue.number, title: issue.title, date, author, body, comments: issue.comments, htmlUrl: issue.html_url, commentsUrl: issue.comments_url };
 }
 function paragraphHtml(text) {
-  return escapeHtml(text).split(/\n\n+/).map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
+  const images = [];
+  const placeholder = (_, alt, url) => {
+    try {
+      if (new URL(url).protocol !== 'https:') return _;
+      const index = images.push({ alt, url }) - 1;
+      return `@@IMAGE${index}@@`;
+    } catch { return _; }
+  };
+  let safe = escapeHtml(text || '').replace(/!\[([^\]]*)\]\((https:\/\/[^\s)]+)\)/g, placeholder);
+  safe = safe.replace(/@@IMAGE(\d+)@@/g, (_, index) => `<img class="diary-photo" src="${escapeHtml(images[index].url)}" alt="${escapeHtml(images[index].alt || '日記の写真')}">`);
+  return safe.split(/\n\n+/).map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
 }
 function showLoadError(target, message) { target.innerHTML = `<div class="entry"><p>${message}</p><p class="note">GitHub の公開データを読み込めませんでした。少し時間をおいて再読み込みしてください。</p></div>`; }
 
