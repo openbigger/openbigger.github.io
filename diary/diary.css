@@ -55,4 +55,31 @@ button:active { border-style: inset; }
 .local-badge { color: #7f6730; background: #fff3bd; border: 2px outset #fff9df; font-size: 11px; padding: 2px 5px; }
 .diary-photo { display: block; max-width: 100%; height: auto; margin: 10px auto; border: 5px ridge #f0cbd5; padding: 3px; background: #fff; }
 .entry-thumb { float: right; width: 92px; height: 68px; object-fit: cover; margin: 0 0 6px 10px; border: 3px outset #f4dce4; }
-@media (max-width: 800px) { .page { width: auto; margin: 8px; } .layout, .layout tbody, .layout tr, .layout td { display: block; width: auto; } .side { width: auto; } }
+/* 携帯版：保留旧式表格与凸起边框，只把 MENU 放到正文上方。 */
+@media (max-width: 800px) {
+  html, body { min-width: 0; overflow-x: hidden; }
+  body { font-size: 13px; line-height: 1.55; }
+  .page { width: auto; margin: 4px; border-width: 4px; }
+  .header { padding: 7px 6px 5px; }
+  .header h1 { font-size: 18px; letter-spacing: 1px; }
+  .header p { font-size: 11px; }
+  .layout, .layout tbody, .layout tr, .layout td { display: block; width: auto; }
+  .layout { border-spacing: 4px; }
+  .side { width: auto; }
+  .side .box { display: none; }
+  .side .box:first-child { display: block; margin: 0 0 6px; padding: 4px 5px; }
+  .side .box-title { display: none; }
+  .nav { line-height: 1.7; }
+  .nav li { display: inline; border: 0; padding: 0; }
+  .nav li::before { content: "["; }
+  .nav li::after { content: "] "; }
+  .content-title { margin: 0 0 6px; padding: 3px 5px; font-size: 14px; }
+  .box, .entry { padding: 6px; border-width: 3px; }
+  .entry { margin-bottom: 8px; }
+  .entry h2 { margin-bottom: 5px; }
+  .entry-thumb { width: 72px; height: 54px; margin-left: 6px; }
+  .diary-photo { max-width: 100%; margin: 7px auto; border-width: 3px; }
+  .footer { padding: 4px 3px 9px; font-size: 10px; line-height: 1.45; }
+  input[type="text"], input[type="date"], textarea { font-size: 16px; }
+  button { padding: 3px 8px; }
+}

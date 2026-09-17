@@ -41,3 +41,70 @@ body::before,body::after{display:none}
 .junk-drawer{width:68%;margin:18px 0 0 19px;padding:7px 10px;border:4px ridge #806d00;background:#f3a7bf;color:#000}
 .junk-drawer h2{margin:-7px -10px 8px;padding:3px 6px;background:#c4db2e;color:#000;font:14px Arial,SimSun,sans-serif}
 .junk-drawer p{margin:7px 0;font:12px/1.35 Arial,SimSun,sans-serif;color:#000}
+
+/* 横幅下方的友情链接区：把原侧栏广告也集中留一份，方便从携帯版找到。 */
+.banner-link-zone{display:none;padding:5px 12px 8px;background:#e8edf8;border-bottom:3px ridge #b7c6df;color:#173f80;font:12px Arial,SimSun,sans-serif}
+.banner-link-zone p{margin:0 0 5px;padding-bottom:4px;border-bottom:1px dotted #61799d}
+.banner-link-zone p img{width:27px;height:20px;vertical-align:middle;object-fit:fill}
+.banner-ads{display:grid;grid-template-columns:1fr 1fr;gap:11px;max-width:510px}
+.banner-ads .ad{min-height:62px;padding:5px;font-size:13px;box-shadow:2px 2px 0 #6f7991}
+.banner-ads .ad-pink span{font-size:17px}
+.mobile-counter{display:none}
+
+/* 携帯版：首页仍是同一张网页，只在窄屏把左栏收成页首的文字菜单。 */
+@media (max-width: 700px){
+  html,body{width:100%;min-width:0;height:auto;overflow-x:hidden}
+  body{background:#fff;font-size:14px}
+  body::before,body::after,.watermark-layer{display:none}
+  .site-shell{display:block;width:100%;height:auto;min-height:0;margin:0;border:2px solid #dfa67f;overflow:visible}
+  .sidebar{display:block;overflow:visible;border:0;background:#bdcce5}
+  .logo-box{height:auto;min-height:48px;padding:5px 8px;align-items:center;border-bottom:1px dotted #496a9e;background:#d9e4f4}
+  .logo-box a{font-size:24px;line-height:1;letter-spacing:0;text-shadow:1px 1px 0 #91d8ff,2px 2px 0 #f2d629}
+  .logo-box a::after{content:" のホームページ";font:12px SimSun,serif;color:#1753b8;text-shadow:none}
+  .logo-box span{display:none}
+  .old-nav{padding:5px 4px 6px;border-bottom:2px dashed #8497b5;font-size:0;line-height:1.7}
+  .old-nav a{display:inline;padding:0 3px;border:0;background:transparent!important;color:#102d88!important;font-size:13px;font-weight:normal;text-shadow:none!important;text-decoration:underline}
+  .old-nav a::before{content:"["}
+  .old-nav a::after{content:"]"}
+  .old-nav a:nth-of-type(n+5){display:none}
+  .ad-stack,.counter,.counter-strip{display:none}
+  .main-area{display:block;overflow:visible;background:#fff}
+  .top-strip{height:auto;min-height:23px;padding:3px 7px;border-bottom:1px dashed #c18b58;background:#fff0d8;color:#233b9c;font-size:12px}
+  .top-strip span::before{content:"★ "}
+  .top-strip span::after{content:" ★"}
+  .top-strip marquee{display:none}
+  .mobile-banner-row{display:flex;align-items:center;gap:6px;min-width:0;border-bottom:2px solid #f1d7a0;background:#fff}
+  .banner{flex:0 1 auto;width:auto;max-width:calc(100% - 138px);height:90px;max-height:none;border-bottom:0;object-fit:contain;object-position:left center}
+  .mobile-counter{display:block;flex:0 0 132px;overflow:hidden;color:#183974;font:11px/1 Arial,SimSun,sans-serif;text-align:center}
+  .mobile-counter img{display:block;width:132px;height:53px;margin-top:3px}
+  .banner-link-zone{display:block;padding:4px 6px 6px;border-bottom-width:2px;font-size:12px;line-height:1.45}
+  .banner-link-zone p{margin-bottom:4px;padding-bottom:3px}
+  .banner-ads{gap:5px;max-width:none}
+  .banner-ads .ad{min-height:54px;padding:4px 2px;font-size:10px;line-height:1.18}
+  .banner-ads .ad-pink span{font-size:14px}
+  .content-pane{overflow:visible;padding:7px 8px 16px}
+  .content-title{margin:0 0 8px;padding:2px 4px;border-top:1px solid #f1c784;font-size:12px}
+  .welcome-card{display:flex;gap:7px;padding:6px;border:1px solid #777}
+  .welcome-card>img{display:block;flex:0 1 42%;width:42%;max-width:42%;height:auto;max-height:none;margin:0;border-width:3px;object-fit:contain;align-self:flex-start}
+  .welcome-card>div{min-width:0;flex:1}
+  .welcome-card h1{margin:2px 0 6px;font-size:18px}
+  .welcome-card p{margin:5px 0;font-size:14px;line-height:1.4}
+  .divider{margin:10px 0 8px;font-size:12px}
+  .divider a{font-size:12px!important}
+  .columns{display:block}
+  .columns>div{margin:0 0 8px;padding:4px 7px 7px}
+  .columns h2{margin:-4px -7px 6px;padding:3px 6px;font-size:14px}
+  .columns ul{padding-left:16px;line-height:1.45}
+  .news-scroll{height:auto;max-height:none;overflow:visible}
+  .columns>div:first-child ul{animation:none}
+  .columns>div:first-child ul::after{display:block}
+  .bottom-badges{margin-top:10px;padding:4px;font-size:10px;line-height:1.3}
+  .ad-row{grid-template-columns:1fr 1fr;gap:5px;margin:9px 0 4px}
+  .ad-row .ad{min-height:58px;padding:4px 2px;font-size:11px}
+  .ad-row .ad-green{font-size:10px}
+  .ad-hot-cat{grid-column:1 / -1;width:100%;height:48px;margin:0;object-fit:fill}
+  .junk-drawer{width:auto;margin:10px 0 0;padding:5px 7px;border-width:3px}
+  .junk-drawer h2{margin:-5px -7px 6px;padding:2px 5px;font-size:13px}
+  .junk-drawer p{margin:5px 0;font-size:12px;line-height:1.3}
+  .copyright{margin-top:10px;font-size:10px;line-height:1.3}
+}
