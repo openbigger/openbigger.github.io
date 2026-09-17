@@ -38,7 +38,7 @@ function paragraphHtml(text) {
   raw = raw.replace(/<img\b[^>]*\bsrc=["'](https:\/\/[^"'\s>]+)["'][^>]*>/gi, (_, url) => placeholder(_, '日記の写真', url));
   let safe = escapeHtml(raw);
   safe = safe.replace(/@@IMAGE(\d+)@@/g, (_, index) => `<img class="diary-photo" src="${escapeHtml(images[index].url)}" alt="${escapeHtml(images[index].alt || '日記の写真')}">`);
-  return safe.split(/\n\n+/).map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
+  return safe.replace(/(<img class="diary-photo"[^>]*>)/g, '\n\n$1\n\n').split(/\n\n+/).map(p => /^<img class="diary-photo"[^>]*>$/.test(p) ? p : `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
 }
 function previewText(text) { return String(text || '').replace(/!\[[^\]]*\]\(https:\/\/[^\s)]+\)/g, '').replace(/<img\b[^>]*>/gi, '').replace(/^---\s*$/m, '').trim(); }
 function commentHtml(comment) {
@@ -53,7 +53,7 @@ async function renderDiaryList() {
   try {
     const issues = await github(`${apiBase}/issues?state=open&labels=${encodeURIComponent(config.diaryLabel)}&per_page=100`);
     const posts = issues.filter(issue => !issue.pull_request).map(postFromIssue);
-    target.innerHTML = posts.length ? posts.map((post, index) => `<article class="entry"><h2><a href="./entry.html?id=${post.id}">${dateText(post.date)}　${escapeHtml(post.title)}</a>${index === 0 ? ' <span class="new">NEW!</span>' : ''}</h2>${post.image ? `<img class="entry-thumb" src="${escapeHtml(post.image)}" alt="日記の写真">` : ''}<p>${escapeHtml(previewText(post.body)).split('\n\n')[0].replace(/\n/g, '<br>')}</p><p align="right"><a href="./entry.html?id=${post.id}">≫ 続きを読む</a></p></article>`).join('') : '<div class="entry"><p>まだ日記はありません。</p><p class="note">管理人が最初の日記を書いているところです。(^^)</p></div>';
+    target.innerHTML = posts.length ? posts.map((post, index) => `<article class="entry"><h2><a href="./entry.html?id=${post.id}">${dateText(post.date)}　${escapeHtml(post.title)}</a>${index === 0 ? ' <span class="new">NEW!</span>' : ''}</h2>${post.image ? `<img class="entry-thumb" src="${escapeHtml(post.image)}" alt="日記の写真">` : ''}<p>${escapeHtml(previewText(post.body)).split('\n\n')[0].replace(/\n/g, '<br>')}</p><p align="right"><a href="./entry.html?id=${post.id}">≫ More</a></p></article>`).join('') : '<div class="entry"><p>まだ日記はありません。</p><p class="note">管理人が最初の日記を書いているところです。(^^)</p></div>';
   } catch { showLoadError(target, '日記を読み込めませんでした。'); }
 }
 async function renderEntry() {
@@ -88,7 +88,8 @@ function setupStation() {
   });
 }
 async function setupBbs() {
-  const target = document.querySelector('#bbs-messages'); const link = document.querySelector('#bbs-link'); if (!target || !link) return;
+  const target = document.querySelector('#bbs-messages'); const link = document.querySelector('#bbs-link'); const pagination = document.querySelector('#bbs-pagination'); if (!target || !link) return;
+  const page = Math.max(1, Number.parseInt(new URLSearchParams(location.search).get('page'), 10) || 1);
   try {
     const issues = await github(`${apiBase}/issues?state=open&labels=${encodeURIComponent(config.bbsLabel)}&per_page=1`);
     const issue = issues.find(item => !item.pull_request);
@@ -97,9 +98,14 @@ async function setupBbs() {
     link.href = `${repoUrl}/issues/new?labels=${encodeURIComponent(config.bbsLabel)}&title=${encodeURIComponent('Guestbook / 掲示板')}&body=${encodeURIComponent('この Issue のコメントを、ホームページの掲示板として使います。')}`;
     link.textContent = '管理人が掲示板を作る'; return;
     }
-    const comments = await github(issue.comments_url);
+    const comments = await github(`${issue.comments_url}?per_page=10&page=${page}&sort=created&direction=desc`);
     target.innerHTML = comments.length ? comments.map(commentHtml).join('') : '<p class="note">まだ書き込みはありません。はじめの一人になってね。</p>';
-    link.href = issue.html_url; link.textContent = 'GitHub で書き込む';
+    link.href = issue.html_url; link.textContent = 'Leave a Comment with GitHub';
+    if (pagination) {
+      const previous = page > 1 ? `<a href="?page=${page - 1}">← 新しい10件</a>` : '';
+      const next = page * 10 < issue.comments ? `<a href="?page=${page + 1}">前の10件 →</a>` : '';
+      pagination.innerHTML = previous || next ? `${previous}${next}` : '';
+    }
   } catch { target.innerHTML = '<p class="note">掲示板を読み込めませんでした。</p>'; }
 }
 renderDiaryList(); renderEntry(); setupStation(); setupBbs();

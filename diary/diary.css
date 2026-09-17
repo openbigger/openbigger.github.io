@@ -47,13 +47,18 @@ input[type="text"], input[type="date"], textarea { box-sizing: border-box; width
 textarea { min-height: 130px; resize: vertical; }
 button { color: #64414e; background: #f7d9e3; border: 3px outset #fff3f7; cursor: pointer; font: inherit; padding: 4px 12px; }
 button:active { border-style: inset; }
+.github-comment-button { display: inline-block; color: #64414e; background: #f7d9e3; border: 3px outset #fff3f7; font: inherit; font-size: 13px; padding: 4px 12px; text-decoration: none; }
+.github-comment-button:visited { color: #64414e; }
+.github-comment-button:active { border-style: inset; }
+.bbs-pagination { text-align: center; margin: 12px 0 3px; font-size: 12px; }
+.bbs-pagination a { margin: 0 8px; }
 .comment { border-top: 1px dotted #d9aab8; padding: 8px 2px; }
 .comment-avatar { float: left; width: 34px; height: 34px; margin: 1px 8px 4px 1px; border: 2px outset #f3dce3; background: #fff; }
 .comment::after { content: ""; display: block; clear: both; }
 .comment-name { color: #a94969; font-weight: bold; }
 .comment-date { color: #8c8186; font-size: 11px; }
 .local-badge { color: #7f6730; background: #fff3bd; border: 2px outset #fff9df; font-size: 11px; padding: 2px 5px; }
-.diary-photo { display: block; max-width: 100%; height: auto; margin: 10px auto; border: 5px ridge #f0cbd5; padding: 3px; background: #fff; }
+.diary-photo { display: inline-block; width: auto; max-width: min(100%, 220px); height: auto; margin: 7px 4px; vertical-align: top; }
 .entry-thumb { float: right; width: 92px; height: 68px; object-fit: cover; margin: 0 0 6px 10px; border: 3px outset #f4dce4; }
 /* 携帯版：保留旧式表格与凸起边框，只把 MENU 放到正文上方。 */
 @media (max-width: 800px) {
@@ -78,7 +83,7 @@ button:active { border-style: inset; }
   .entry { margin-bottom: 8px; }
   .entry h2 { margin-bottom: 5px; }
   .entry-thumb { width: 72px; height: 54px; margin-left: 6px; }
-  .diary-photo { max-width: 100%; margin: 7px auto; border-width: 3px; }
+  .diary-photo { max-width: min(100%, 220px); margin: 5px 3px; }
   .footer { padding: 4px 3px 9px; font-size: 10px; line-height: 1.45; }
   input[type="text"], input[type="date"], textarea { font-size: 16px; }
   button { padding: 3px 8px; }
