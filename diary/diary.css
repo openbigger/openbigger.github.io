@@ -48,6 +48,8 @@ textarea { min-height: 130px; resize: vertical; }
 button { color: #64414e; background: #f7d9e3; border: 3px outset #fff3f7; cursor: pointer; font: inherit; padding: 4px 12px; }
 button:active { border-style: inset; }
 .comment { border-top: 1px dotted #d9aab8; padding: 8px 2px; }
+.comment-avatar { float: left; width: 34px; height: 34px; margin: 1px 8px 4px 1px; border: 2px outset #f3dce3; background: #fff; }
+.comment::after { content: ""; display: block; clear: both; }
 .comment-name { color: #a94969; font-weight: bold; }
 .comment-date { color: #8c8186; font-size: 11px; }
 .local-badge { color: #7f6730; background: #fff3bd; border: 2px outset #fff9df; font-size: 11px; padding: 2px 5px; }

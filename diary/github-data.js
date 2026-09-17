@@ -14,20 +14,36 @@ function postFromIssue(issue) {
   const date = (raw.match(/^date:\s*(\d{4}-\d{2}-\d{2})\s*$/m) || [])[1] || issue.created_at.slice(0, 10);
   const author = (raw.match(/^author:\s*(.+)$/m) || [])[1] || issue.user.login;
   const body = raw.replace(/^date:\s*.*$/m, '').replace(/^author:\s*.*$/m, '').trim();
-  return { id: issue.number, title: issue.title, date, author, body, comments: issue.comments, htmlUrl: issue.html_url, commentsUrl: issue.comments_url };
+  return { id: issue.number, title: issue.title, date, author, body, image: firstImage(body), comments: issue.comments, htmlUrl: issue.html_url, commentsUrl: issue.comments_url };
+}
+function firstImage(text) {
+  const markdown = String(text || '').match(/!\[[^\]]*\]\((https:\/\/[^\s)]+)\)/);
+  const html = String(text || '').match(/<img\b[^>]*\bsrc=["'](https:\/\/[^"'\s>]+)["'][^>]*>/i);
+  return (markdown || html || [])[1] || null;
+}
+function imageToken(url, alt = '日記の写真') {
+  try { return new URL(url).protocol === 'https:' ? { url, alt } : null; } catch { return null; }
 }
 function paragraphHtml(text) {
   const images = [];
   const placeholder = (_, alt, url) => {
-    try {
-      if (new URL(url).protocol !== 'https:') return _;
-      const index = images.push({ alt, url }) - 1;
+    const image = imageToken(url, alt);
+    if (image) {
+      const index = images.push(image) - 1;
       return `@@IMAGE${index}@@`;
-    } catch { return _; }
+    }
+    return _;
   };
-  let safe = escapeHtml(text || '').replace(/!\[([^\]]*)\]\((https:\/\/[^\s)]+)\)/g, placeholder);
+  let raw = String(text || '').replace(/!\[([^\]]*)\]\((https:\/\/[^\s)]+)\)/g, placeholder);
+  raw = raw.replace(/<img\b[^>]*\bsrc=["'](https:\/\/[^"'\s>]+)["'][^>]*>/gi, (_, url) => placeholder(_, '日記の写真', url));
+  let safe = escapeHtml(raw);
   safe = safe.replace(/@@IMAGE(\d+)@@/g, (_, index) => `<img class="diary-photo" src="${escapeHtml(images[index].url)}" alt="${escapeHtml(images[index].alt || '日記の写真')}">`);
   return safe.split(/\n\n+/).map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
+}
+function previewText(text) { return String(text || '').replace(/!\[[^\]]*\]\(https:\/\/[^\s)]+\)/g, '').replace(/<img\b[^>]*>/gi, '').replace(/^---\s*$/m, '').trim(); }
+function commentHtml(comment) {
+  const avatar = comment.user?.avatar_url ? `<img class="comment-avatar" src="${escapeHtml(comment.user.avatar_url)}" alt="${escapeHtml(comment.user.login)} のアイコン">` : '';
+  return `<div class="comment">${avatar}<span class="comment-name">${escapeHtml(comment.user?.login || '名無しさん')}</span> <span class="comment-date">${new Date(comment.created_at).toLocaleString('ja-JP')}</span><br>${paragraphHtml(comment.body)}</div>`;
 }
 function showLoadError(target, message) { target.innerHTML = `<div class="entry"><p>${message}</p><p class="note">GitHub の公開データを読み込めませんでした。少し時間をおいて再読み込みしてください。</p></div>`; }
 
@@ -37,7 +53,7 @@ async function renderDiaryList() {
   try {
     const issues = await github(`${apiBase}/issues?state=open&labels=${encodeURIComponent(config.diaryLabel)}&per_page=100`);
     const posts = issues.filter(issue => !issue.pull_request).map(postFromIssue);
-    target.innerHTML = posts.length ? posts.map((post, index) => `<article class="entry"><h2><a href="./entry.html?id=${post.id}">${dateText(post.date)}　${escapeHtml(post.title)}</a>${index === 0 ? ' <span class="new">NEW!</span>' : ''}</h2><p>${escapeHtml(post.body).split('\n\n')[0].replace(/\n/g, '<br>')}</p><p align="right"><a href="./entry.html?id=${post.id}">≫ 続きを読む</a></p></article>`).join('') : '<div class="entry"><p>まだ日記はありません。</p><p class="note">管理人が最初の日記を書いているところです。(^^)</p></div>';
+    target.innerHTML = posts.length ? posts.map((post, index) => `<article class="entry"><h2><a href="./entry.html?id=${post.id}">${dateText(post.date)}　${escapeHtml(post.title)}</a>${index === 0 ? ' <span class="new">NEW!</span>' : ''}</h2>${post.image ? `<img class="entry-thumb" src="${escapeHtml(post.image)}" alt="日記の写真">` : ''}<p>${escapeHtml(previewText(post.body)).split('\n\n')[0].replace(/\n/g, '<br>')}</p><p align="right"><a href="./entry.html?id=${post.id}">≫ 続きを読む</a></p></article>`).join('') : '<div class="entry"><p>まだ日記はありません。</p><p class="note">管理人が最初の日記を書いているところです。(^^)</p></div>';
   } catch { showLoadError(target, '日記を読み込めませんでした。'); }
 }
 async function renderEntry() {
@@ -56,7 +72,7 @@ async function renderIssueComments(post) {
   link.textContent = 'GitHub で留言する';
   try {
     const comments = await github(post.commentsUrl);
-    target.innerHTML = comments.length ? comments.map(comment => `<div class="comment"><span class="comment-name">${escapeHtml(comment.user.login)}</span> <span class="comment-date">${new Date(comment.created_at).toLocaleString('ja-JP')}</span><br>${paragraphHtml(comment.body)}</div>`).join('') : '<p class="note">まだ書き込みはありません。よかったら一言どうぞ。</p>';
+    target.innerHTML = comments.length ? comments.map(commentHtml).join('') : '<p class="note">まだ書き込みはありません。よかったら一言どうぞ。</p>';
   } catch { target.innerHTML = '<p class="note">コメントを読み込めませんでした。</p>'; }
 }
 function setupStation() {
@@ -82,7 +98,7 @@ async function setupBbs() {
     link.textContent = '管理人が掲示板を作る'; return;
     }
     const comments = await github(issue.comments_url);
-    target.innerHTML = comments.length ? comments.map(comment => `<div class="comment"><span class="comment-name">${escapeHtml(comment.user.login)}</span> <span class="comment-date">${new Date(comment.created_at).toLocaleString('ja-JP')}</span><br>${paragraphHtml(comment.body)}</div>`).join('') : '<p class="note">まだ書き込みはありません。はじめの一人になってね。</p>';
+    target.innerHTML = comments.length ? comments.map(commentHtml).join('') : '<p class="note">まだ書き込みはありません。はじめの一人になってね。</p>';
     link.href = issue.html_url; link.textContent = 'GitHub で書き込む';
   } catch { target.innerHTML = '<p class="note">掲示板を読み込めませんでした。</p>'; }
 }
