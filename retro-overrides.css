@@ -1,0 +1,43 @@
+/* 页面外的 2000 年代个人站背景：白底、斜杠与低对比度水印。 */
+body{background-color:#fff;background-image:repeating-linear-gradient(-38deg,transparent 0,transparent 86px,rgba(92,151,208,.12) 87px,rgba(92,151,208,.12) 89px,transparent 90px,transparent 145px)}
+body::before{content:"张大点个人小站　/　ZHANG DA DIAN　/　WELCOME TO MY HOMEPAGE　/　张大点个人小站　/　ZHANG DA DIAN　/　WELCOME TO MY HOMEPAGE　/　张大点个人小站　/　ZHANG DA DIAN";position:fixed;z-index:0;top:29%;left:-18%;width:145%;color:rgba(54,118,184,.13);font:bold 16px Arial,SimSun,sans-serif;letter-spacing:5px;text-align:center;transform:rotate(-38deg);pointer-events:none}
+body::after{content:"WELCOME TO MY HOMEPAGE　/　张大点个人小站　/　ZHANG DA DIAN　/　WELCOME TO MY HOMEPAGE　/　张大点个人小站　/　ZHANG DA DIAN　/　WELCOME TO MY HOMEPAGE　/　张大点个人小站　/　ZHANG DA DIAN";position:fixed;z-index:0;top:63%;left:-18%;width:145%;color:rgba(54,118,184,.13);font:bold 16px Arial,SimSun,sans-serif;letter-spacing:5px;text-align:center;transform:rotate(-38deg);pointer-events:none}
+.site-shell{position:relative;z-index:1}
+
+.watermark-layer{position:fixed;z-index:0;top:-220px;left:-100vw;width:300vw;display:grid;gap:48px;color:rgba(54,118,184,.13);font:bold 16px Arial,SimSun,sans-serif;letter-spacing:5px;white-space:nowrap;text-align:center;transform:rotate(-38deg);pointer-events:none}
+body::before,body::after{display:none}
+
+/* 公告栏正文单独裁切，只缓慢上卷一点，不碰标题栏。 */
+.columns>div{min-width:0}
+.columns>div:first-child{height:auto;overflow:visible}
+.news-scroll{height:91px;overflow:hidden}
+.columns>div:first-child ul{margin-top:0;animation:upward-news 21s linear infinite}
+.columns>div:first-child ul::after{content:"\A2026.09.15　本站背景已换成非常清白的白色。\A2026.09.14　欢迎留言，回复随缘。";display:block;white-space:pre;line-height:1.65}
+@keyframes upward-news{from{transform:translateY(0)}to{transform:translateY(-142px)}}
+
+/* 站长新摆的底部广告排：三块硬挤在同一横行。 */
+.ad-row{display:grid;grid-template-columns:1fr 1fr 1.25fr;align-items:center;gap:9px;margin:17px 0 5px}
+.ad-row .ad{min-width:0;min-height:82px;font-size:13px}
+.ad-row .ad-green{font-size:12px}
+.ad-hot-cat{width:100%;height:88px;object-fit:fill;transform:rotate(-2deg);filter:drop-shadow(2px 3px 0 #dc0000)}
+
+/* 这次广告牌摆正，剩下的配色继续乱来。 */
+.ad,.ad-pink,.ad-blue,.ad-yellow,.ad-green,.ad-hot-cat{transform:none}
+.ad-hot-cat{filter:drop-shadow(2px 3px 0 #dc0000)}
+.site-shell{height:860px;min-height:0;overflow:hidden;border-color:#dfa67f}
+.sidebar{overflow-y:visible;background:#bdcce5}
+.logo-box{align-items:center}
+.logo-box a{padding:0;border:0;background:none;color:#1753b8;font:bold 39px/1 "Arial Black",SimHei,sans-serif;letter-spacing:1px;text-shadow:2px 2px 0 #91d8ff,4px 4px 0 #f2d629,6px 6px 0 rgba(44,70,148,.65)}
+.old-nav .nav-parent{cursor:default}
+.old-nav .nav-child{padding-left:24px;font-size:15px;background:#aebfdd;color:#173f80}
+.old-nav .nav-child img{width:27px;height:20px;vertical-align:middle;object-fit:fill}
+.welcome-card{background:#383838;color:#efefef}
+.welcome-card h1{color:#f4d447}
+.welcome-card a{color:#7ee2ff}
+.copyright{margin:18px 0 0;padding:5px;border-top:1px dotted #7f8aa0;color:#5c6472;font:11px Arial,sans-serif;text-align:center}
+.counter{height:96px;overflow:hidden}
+.counter-strip{height:152px;background:#b7b06e}
+.content-pane{flex:1;min-height:0}
+.junk-drawer{width:68%;margin:18px 0 0 19px;padding:7px 10px;border:4px ridge #806d00;background:#f3a7bf;color:#000}
+.junk-drawer h2{margin:-7px -10px 8px;padding:3px 6px;background:#c4db2e;color:#000;font:14px Arial,SimSun,sans-serif}
+.junk-drawer p{margin:7px 0;font:12px/1.35 Arial,SimSun,sans-serif;color:#000}
