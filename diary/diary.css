@@ -38,6 +38,9 @@ a:visited { color: #6c3a87; }
 .new { color: #e32b39; font-size: 11px; font-family: Arial, sans-serif; font-weight: bold; }
 hr { border: 0; border-top: 2px groove #f0d5dc; height: 2px; }
 .pager { text-align: center; font-size: 12px; margin: 14px 0; }
+.entry-pagination { display: flex; justify-content: space-between; gap: 12px; margin: -2px 0 14px; font-size: 12px; }
+.entry-pagination span, .entry-pagination a { flex: 1; }
+.entry-pagination a:last-child { text-align: right; }
 .footer { color: #81747a; font-size: 11px; text-align: center; padding: 5px 0 15px; }
 .archive-list { padding-left: 22px; }
 .note { color: #82757b; font-size: 12px; }
