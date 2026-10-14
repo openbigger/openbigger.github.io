@@ -2,6 +2,8 @@
 window.DIARY_CONFIG = {
   owner: 'openbigger',
   repo: 'openbigger.github.io',
+  siteUrl: 'https://openbigger.github.io',
   diaryLabel: 'diary',
-  bbsLabel: 'bbs'
+  bbsLabel: 'bbs',
+  bbsIssueNumber: 4
 };

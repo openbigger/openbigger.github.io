@@ -1,6 +1,9 @@
 const config = window.DIARY_CONFIG;
 const apiBase = `https://api.github.com/repos/${config.owner}/${config.repo}`;
 const repoUrl = `https://github.com/${config.owner}/${config.repo}`;
+const siteUrl = config.siteUrl || 'https://openbigger.github.io';
+const diaryUrl = `${siteUrl}/diary/`;
+const bbsUrl = `${siteUrl}/diary/bbs.html`;
 const escapeHtml = value => { const el = document.createElement('span'); el.textContent = value || ''; return el.innerHTML; };
 const dateText = value => new Date(value).toLocaleDateString('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' });
 
@@ -41,20 +44,37 @@ function paragraphHtml(text) {
   return safe.replace(/(<img class="diary-photo"[^>]*>)/g, '\n\n$1\n\n').split(/\n\n+/).map(p => /^<img class="diary-photo"[^>]*>$/.test(p) ? p : `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
 }
 function previewText(text) { return String(text || '').replace(/!\[[^\]]*\]\(https:\/\/[^\s)]+\)/g, '').replace(/<img\b[^>]*>/gi, '').replace(/^---\s*$/m, '').trim(); }
-function commentHtml(comment) {
+function truncateText(text, limit) {
+  const chars = Array.from(String(text || '').trim());
+  return chars.length > limit ? `${chars.slice(0, limit).join('')}…` : chars.join('');
+}
+function commentHtml(comment, limit = Infinity) {
   const avatar = comment.user?.avatar_url ? `<img class="comment-avatar" src="${escapeHtml(comment.user.avatar_url)}" alt="${escapeHtml(comment.user.login)} のIcon">` : '';
-  return `<div class="comment">${avatar}<span class="comment-name">${escapeHtml(comment.user?.login || '無名氏')}</span> <span class="comment-date">${new Date(comment.created_at).toLocaleString('ja-JP')}</span><br>${paragraphHtml(comment.body)}</div>`;
+  const body = limit === Infinity ? comment.body : truncateText(comment.body, limit);
+  return `<div class="comment">${avatar}<span class="comment-name">${escapeHtml(comment.user?.login || '無名氏')}</span> <span class="comment-date">${new Date(comment.created_at).toLocaleString('ja-JP')}</span><br>${paragraphHtml(body)}</div>`;
 }
 function showLoadError(target, message) { target.innerHTML = `<div class="entry"><p>${message}</p><p class="note">GitHub の公開情報読込失敗。少時間後、再読込願。</p></div>`; }
 
 async function renderDiaryList() {
   const target = document.querySelector('#dynamic-entries'); if (!target) return;
   target.innerHTML = '<div class="entry"><p class="note">日記読込中…</p></div>';
+  const page = Math.max(1, Number.parseInt(new URLSearchParams(location.search).get('page'), 10) || 1);
+  const pageSize = 5;
   try {
-    const issues = await github(`${apiBase}/issues?state=open&labels=${encodeURIComponent(config.diaryLabel)}&per_page=100`);
+    const issues = await github(`${apiBase}/issues?state=open&labels=${encodeURIComponent(config.diaryLabel)}&sort=created&direction=desc&per_page=100`);
     const posts = issues.filter(issue => !issue.pull_request).map(postFromIssue);
-    target.innerHTML = posts.length ? posts.map((post, index) => `<article class="entry"><h2><a href="./entry.html?id=${post.id}">${dateText(post.date)}　${escapeHtml(post.title)}</a>${index === 0 ? ' <span class="new">NEW!</span>' : ''}</h2>${post.image ? `<img class="entry-thumb" src="${escapeHtml(post.image)}" alt="日記の写真">` : ''}<p>${escapeHtml(previewText(post.body)).split('\n\n')[0].replace(/\n/g, '<br>')}</p><p align="right"><a href="./entry.html?id=${post.id}">≫ More</a></p></article>`).join('') : '<div class="entry"><p>日記未有。</p><p class="note">管理人初日記執筆中。(^^)</p></div>';
+    const start = (page - 1) * pageSize;
+    const visiblePosts = posts.slice(start, start + pageSize);
+    target.innerHTML = visiblePosts.length ? visiblePosts.map((post, index) => `<article class="entry"><h2><a href="./entry.html?id=${post.id}">${dateText(post.date)}　${escapeHtml(post.title)}</a>${page === 1 && index === 0 ? ' <span class="new">NEW!</span>' : ''}</h2>${post.image ? `<img class="entry-thumb" src="${escapeHtml(post.image)}" alt="日記の写真">` : ''}<p>${escapeHtml(truncateText(previewText(post.body).split('\n\n')[0], 140)).replace(/\n/g, '<br>')}</p><p align="right"><a href="./entry.html?id=${post.id}">≫ More</a></p></article>`).join('') : page === 1 ? '<div class="entry"><p>日記未有。</p><p class="note">管理人初日記執筆中。(^^)</p></div>' : '<div class="entry"><p>該当頁無。</p></div>';
+    renderDiaryPagination(posts.length, page, pageSize);
   } catch { showLoadError(target, '日記読込失敗。'); }
+}
+function renderDiaryPagination(total, page, pageSize) {
+  const target = document.querySelector('#diary-pagination'); if (!target) return;
+  const pages = Math.ceil(total / pageSize);
+  const older = page < pages ? `<a href="?page=${page + 1}">古日記 →</a>` : '';
+  const newer = page > 1 ? `<a href="?page=${page - 1}">← 新日記</a>` : '';
+  target.innerHTML = [newer, `第 ${page} / ${Math.max(pages, 1)} 頁`, older].filter(Boolean).join('　');
 }
 async function renderEntry() {
   const target = document.querySelector('#entry-content'); if (!target) return;
@@ -98,7 +118,7 @@ function setupStation() {
     event.preventDefault(); const data = new FormData(form);
     const title = String(data.get('title')).trim(), body = String(data.get('body')).trim(), author = String(data.get('author')).trim() || 'Yuri';
     if (!title || !body) return;
-    const issueBody = `date: ${data.get('date')}\nauthor: ${author}\n\n${body}\n\n---\n写真有時、GitHubのIssue画面の内Drag追加願。`;
+    const issueBody = `date: ${data.get('date')}\nauthor: ${author}\n\n${body}\n\n---\n写真有時、GitHubのIssue画面の内Drag追加願。\n\n[← 日記一覧復帰](${diaryUrl})`;
     const url = new URL(`${repoUrl}/issues/new`); url.searchParams.set('labels', config.diaryLabel); url.searchParams.set('title', title); url.searchParams.set('body', issueBody);
     location.href = url;
   });
@@ -106,21 +126,42 @@ function setupStation() {
 async function setupBbs() {
   const target = document.querySelector('#bbs-messages'); const link = document.querySelector('#bbs-link'); const pagination = document.querySelector('#bbs-pagination'); if (!target || !link) return;
   const page = Math.max(1, Number.parseInt(new URLSearchParams(location.search).get('page'), 10) || 1);
+  const returnLink = `[← 掲示板復帰](${bbsUrl})`;
+  link.addEventListener('click', async event => {
+    if (!link.href || link.href === location.href || link.href.endsWith('#')) return;
+    event.preventDefault();
+    try {
+      await navigator.clipboard.writeText(returnLink);
+    } catch {
+      const copyField = document.createElement('textarea');
+      copyField.value = returnLink;
+      copyField.setAttribute('aria-label', '掲示板復帰リンク');
+      copyField.style.position = 'fixed'; copyField.style.opacity = '0';
+      document.body.append(copyField); copyField.select();
+      document.execCommand('copy'); copyField.remove();
+    }
+    location.href = link.href;
+  });
+  const commentUrl = config.bbsIssueNumber
+    ? `${repoUrl}/issues/${config.bbsIssueNumber}#new_comment_field`
+    : null;
+  if (commentUrl) link.href = commentUrl;
   try {
     const issues = await github(`${apiBase}/issues?state=open&labels=${encodeURIComponent(config.bbsLabel)}&per_page=1`);
     const issue = issues.find(item => !item.pull_request);
     if (!issue) {
     target.innerHTML = '<p class="note">掲示板、只今準備中。</p>';
-    link.href = `${repoUrl}/issues/new?labels=${encodeURIComponent(config.bbsLabel)}&title=${encodeURIComponent('Guestbook / 掲示板')}&body=${encodeURIComponent('本Issueのコメント、HomePageの掲示板使用。')}`;
+    link.href = `${repoUrl}/issues/new?labels=${encodeURIComponent(config.bbsLabel)}&title=${encodeURIComponent('Guestbook / 掲示板')}&body=${encodeURIComponent(`本Issueの内容、HomePageの掲示板使用。\n\n[← 掲示板復帰](${bbsUrl})`)}`;
     link.textContent = '管理人、掲示板作成'; return;
     }
-    const comments = await github(`${issue.comments_url}?per_page=10&page=${page}&sort=created&direction=desc`);
-    target.innerHTML = comments.length ? comments.map(commentHtml).join('') : '<p class="note">書込未有。最初一人歓迎！</p>';
-    link.href = issue.html_url; link.textContent = 'Leave a Comment with GitHub';
+    const pageSize = 5;
+    const comments = await github(`${issue.comments_url}?per_page=${pageSize}&page=${page}&sort=created&direction=desc`);
+    target.innerHTML = comments.length ? comments.map(comment => commentHtml(comment, 180)).join('') : '<p class="note">書込未有。最初一人歓迎！</p>';
+    link.href = `${issue.html_url}#new_comment_field`; link.textContent = 'Leave a Comment with GitHub';
     if (pagination) {
-      const previous = page > 1 ? `<a href="?page=${page - 1}">← 新10件</a>` : '';
-      const next = page * 10 < issue.comments ? `<a href="?page=${page + 1}">前10件 →</a>` : '';
-      pagination.innerHTML = previous || next ? `${previous}${next}` : '';
+      const previous = page > 1 ? `<a href="?page=${page - 1}">← 新5件</a>` : '';
+      const next = page * pageSize < issue.comments ? `<a href="?page=${page + 1}">前5件 →</a>` : '';
+      pagination.innerHTML = [previous, next].filter(Boolean).join('　');
     }
   } catch { target.innerHTML = '<p class="note">掲示板読込失敗。少時間後、再読込願。</p>'; }
 }
